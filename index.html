@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estado del Sistema — Hospital Universitario San Rafael</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+<header class="topbar">
+  <div class="logo" onclick="showPage('main')">
+    <div class="logo-badge">SR</div>
+    <div>
+      <div class="logo-text">Hospital San Rafael</div>
+      <div class="logo-sub">Sistema de monitoreo · Tunja</div>
+    </div>
+  </div>
+  <nav class="topbar-nav">
+    <button class="nav-btn active" id="nav-main" onclick="showPage('main')">Panel de estado</button>
+    <button class="nav-btn" id="nav-history" onclick="showPage('history')">Historial</button>
+    <span class="live-badge">
+      <span class="live-dot"></span>
+      <span id="lastUpdate">—</span>
+    </span>
+  </nav>
+</header>
+
+
+<div id="page-main" class="page active">
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-title">Estado operativo de sistemas</div>
+      <div class="hero-sub">Hospital Universitario San Rafael de Tunja · Infraestructura TI</div>
+      <div class="global-status" id="globalStatus">
+        <div class="gs-dot"></div>
+        <span id="globalStatusText">Cargando…</span>
+      </div>
+    </div>
+    <div class="hero-meta">
+      <div id="heroTime"></div>
+      <div>TRL 3 · Prueba de concepto</div>
+          </div>
+  </div>
+
+  <!-- METRICS -->
+  <div class="metrics-row">
+    <div class="metric-card">
+      <div class="metric-value mv-ok" id="mOk">—</div>
+      <div class="metric-label">Operativos</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value mv-warn" id="mWarn">—</div>
+      <div class="metric-label">Advertencia</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value mv-err" id="mErr">—</div>
+      <div class="metric-label">Con error</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value mv-navy" id="mTotal">—</div>
+      <div class="metric-label">Total</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value mv-teal" id="mUptime">—</div>
+      <div class="metric-label">Disponib.</div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <div class="section-header">
+    <span class="section-title">Servicios monitoreados</span>
+    <span class="section-meta" id="svcCount"></span>
+  </div>
+  <div class="services-card" id="serviceList"></div>
+
+  <footer style="margin-top:36px;">
+    <div>Portal de monitoreo · Hospital Universitario San Rafael · Tunja, Boyacá</div>
+    <div>Gerencia de Software · USTA 2026 · <a href="https://github.com/Simon-Urbina/san-rafael" target="_blank">GitHub ↗</a></div>
+    <div>Gerencia - Proyecto Final · USTA 2026 · <a href="https://docs.google.com/document/d/1SVEKgQaexPx7VJn9MBsNpVd63FYj3hSrc8XjlQGTSks/edit?tab=t.0#heading=h.ta3al4yln8xl" target="_blank">Google Docs ↗</a></div>
+  </footer>
+
+</div>
+</div>
+<!-- /page-main -->
+
+
+
+<div id="page-history" class="page">
+<div class="container">
+
+  <div class="section-header" style="margin-bottom:16px;">
+    <span class="section-title">Historial de incidentes</span>
+    <span class="section-meta">Últimos 30 días</span>
+  </div>
+
+  <div id="incidentList"></div>
+
+  <div class="history-toggle-wrap">
+    <button class="history-btn" id="historyBtn" onclick="toggleHistory()">
+      <span id="histBtnIcon">↓</span>
+      <span id="histBtnText">Ver historial completo</span>
+    </button>
+  </div>
+
+  <div id="incidentListOld" class="history-hidden"></div>
+
+  <footer style="margin-top:36px;">
+    <div>Portal de monitoreo · Hospital Universitario San Rafael · Tunja, Boyacá</div>
+    <div>Gerencia de Software · USTA 2026 · <a href="https://github.com/Simon-Urbina/san-rafael" target="_blank">GitHub ↗</a></div>
+    <div>Gerencia - Proyecto Final · USTA 2026 · <a href="https://docs.google.com/document/d/1SVEKgQaexPx7VJn9MBsNpVd63FYj3hSrc8XjlQGTSks/edit?tab=t.0#heading=h.ta3al4yln8xl" target="_blank">Google Docs ↗</a></div>
+  </footer>
+
+</div>
+</div>
+<!-- /page-history -->
+
+
+
+<div id="page-detail" class="page">
+<div class="container">
+
+  <button class="detail-back" onclick="showPage('main')">← Volver al panel</button>
+
+  <div class="detail-hero">
+    <div>
+      <div class="detail-name" id="dName"></div>
+      <div class="detail-type" id="dType"></div>
+      <div class="global-status" id="dStatus"><div class="gs-dot" id="dStatusDot"></div><span id="dStatusTxt"></span></div>
+    </div>
+  </div>
+
+  <div class="detail-stats">
+    <div class="dstat">
+      <div class="dstat-val mv-teal" id="dUptime"></div>
+      <div class="dstat-key">Disponibilidad 30d</div>
+    </div>
+    <div class="dstat">
+      <div class="dstat-val mv-navy" id="dEvents"></div>
+      <div class="dstat-key">Eventos registrados</div>
+    </div>
+    <div class="dstat">
+      <div class="dstat-val" id="dLast"></div>
+      <div class="dstat-key">Último evento</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-title">Historial de eventos</span>
+  </div>
+
+  <div class="detail-events-card" id="dEventList"></div>
+
+</div>
+</div>
+<!-- /page-detail -->
+
+
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="mTitle"></div>
+        <div class="modal-sub" id="mSub"></div>
+      </div>
+      <button class="modal-close" onclick="closeModalDirect()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-stats">
+        <div class="mstat">
+          <div class="mstat-val" id="mStatus"></div>
+          <div class="mstat-key">Estado actual</div>
+        </div>
+        <div class="mstat">
+          <div class="mstat-val mv-teal" id="mUptime"></div>
+          <div class="mstat-key">Disponibilidad 30d</div>
+        </div>
+      </div>
+      <div class="modal-ev-title">Eventos recientes</div>
+      <ul class="modal-ev" id="mEvents"></ul>
+      <div style="margin-top:16px; text-align:center;">
+        <button class="history-btn" onclick="openDetailFromModal()" style="font-size:12px; padding:7px 18px;">
+          Ver detalle completo →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="app.js"></script>
+</body>
+</html>
